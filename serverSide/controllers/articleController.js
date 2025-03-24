@@ -63,17 +63,35 @@ exports.createArticle = async (req, res) => {
 // 📜 جلب جميع المقالات
 exports.getAllArticles = async (req, res) => {
   try {
-    const articles = await Article.find({ status: "published" })
-      .select(
-        "_id title description featuredImage author publishedDate category tags"
-      )
+    const page = parseInt(req.query.page) || 1; 
+    const limit = parseInt(req.query.limit) || 10; 
+    const skip = (page - 1) * limit;
+
+    const articlesQuery = Article.find({ status: "published" })
+      .select("_id title description featuredImage author publishedDate category tags")
       .populate("author", "name");
 
-    res.status(200).json(articles);
+    const totalArticles = await Article.countDocuments({ status: "published" });
+
+    const articles = await articlesQuery
+      .skip(skip)
+      .limit(limit);
+
+    res.status(200).json({
+      data: articles,
+      pagination: {
+        currentPage: page,
+        totalPages: Math.ceil(totalArticles / limit),
+        totalItems: totalArticles,
+        itemsPerPage: limit,
+      },
+    });
   } catch (error) {
-    res
-      .status(500)
-      .json({ error: "حدث خطأ أثناء جلب المقالات", details: error.message });
+    console.error("Database error:", error);
+    res.status(500).json({
+      error: "حدث خطأ أثناء جلب المقالات",
+      details: error.message,
+    });
   }
 };
 
@@ -99,14 +117,14 @@ exports.getArticleById = async (req, res) => {
       .populate("userId", "name")
       .sort({ createdAt: -1 });
 
-    // زيادة عدد المشاهدات
+   
     article.views += 1;
     await article.save();
 
     res.status(200).json({
       ...article._doc,
-      comments, // 🔹 إرسال التعليقات من `Comment Model`
-      commentsCount: comments.length, // 🔹 عدد التعليقات
+      comments, 
+      commentsCount: comments.length, 
     });
   } catch (error) {
     res.status(500).json({
@@ -133,7 +151,7 @@ exports.likeArticle = async (req, res) => {
   }
 };
 
-// 🔄 مشاركة مقال
+
 exports.shareArticle = async (req, res) => {
   try {
     const article = await Article.findById(req.params.id);
@@ -152,25 +170,33 @@ exports.shareArticle = async (req, res) => {
   }
 };
 
-// exports.getArticles = async (req, res) => {
-//   const userId = req.params.id;
-//   try {
-//     const articles = await Article.find(userId); //userid
-//     res.json(articles);
-//   } catch (err) {
-//     res.status(500).json({ message: "Error fetching articles" });
-//   }
-// };
-
 exports.getArticles = async (req, res) => {
   try {
-    const { id } = req.params; // جلب الـ userId من params
-    console.log("Fetching articles for user ID:", id); // إضافة سجل للتأكد من ID
-    const articles = await Article.find({ authorId: id }); // البحث عن المقالات التي تحتوي على الـ userId
+    const { id } = req.params; // Get userId from params
+    const { page = 1, limit = 6 } = req.query; // Get pagination parameters (default to page 1 and limit 10)
+
+    console.log("Fetching articles for user ID:", id); // Log for debugging
+
+    // Find articles for the given user, applying pagination
+    const articles = await Article.find({ authorId: id }) // Filter articles by authorId
+      .skip((page - 1) * limit) // Skip articles for the previous pages
+      .limit(Number(limit)) // Limit the number of articles per page
+      .sort({ createdAt: -1 }); // Optionally sort articles by creation date (newest first)
+
+    // Get total count of articles for this user
+    const totalArticles = await Article.countDocuments({ authorId: id });
+
     if (!articles || articles.length === 0) {
       return res.status(404).send("No articles found for this user");
     }
-    res.status(200).json(articles);
+
+    // Return articles with pagination info
+    res.status(200).json({
+      articles,
+      currentPage: page,
+      totalPages: Math.ceil(totalArticles / limit), // Calculate total pages
+      totalArticles,
+    });
   } catch (error) {
     console.error("Database error:", error);
     res.status(500).send("An error occurred while fetching articles");

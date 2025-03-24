@@ -53,7 +53,6 @@ const Profile = () => {
     if (updatedUser.profilePicture) {
       formData.append("profilePicture", updatedUser.profilePicture);
     }
-
     try {
       const res = await axios.put(
         "http://localhost:5000/api/users/profile",
@@ -87,9 +86,9 @@ const Profile = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <div className="text-xl text-gray-700">
+        <div className="text-xl text-[#383838]">
           <svg
-            className="animate-spin -ml-1 mr-3 h-8 w-8 text-green-500"
+            className="animate-spin -ml-1 mr-3 h-8 w-8 text-[#51a31d]"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
@@ -116,13 +115,13 @@ const Profile = () => {
 
   return (
     <div
-      className="bg-gray-100 min-h-screen py-8 px-4 sm:px-6 lg:px-8"
+      className="bg-[#f9f9fb] min-h-screen py-8 px-4 sm:px-6 lg:px-8"
       dir="rtl"
     >
       <div className="max-w-4xl mx-auto">
         <div className="bg-white shadow-lg rounded-lg overflow-hidden">
           {/* Header Section */}
-          <div className="bg-gradient-to-r from-green-500 to-blue-500 px-6 py-8">
+          <div className="bg-[#51a31d] px-6 py-8">
             <div className="flex flex-col md:flex-row items-center">
               {user.profilePicture ? (
                 <img
@@ -132,7 +131,7 @@ const Profile = () => {
                 />
               ) : (
                 <div className="w-24 h-24 md:w-32 md:h-32 rounded-full bg-gray-300 flex items-center justify-center border-4 border-white shadow-md">
-                  <span className="text-4xl text-gray-600">
+                  <span className="text-4xl text-[#383838]">
                     {user.name?.charAt(0).toUpperCase() || "؟"}
                   </span>
                 </div>
@@ -141,15 +140,15 @@ const Profile = () => {
                 <h1 className="text-2xl md:text-3xl font-bold text-white">
                   {user.name}
                 </h1>
-                <p className="text-blue-100">{user.email}</p>
-                <span className="inline-block mt-2 px-3 py-1 bg-blue-500 text-white rounded-full text-sm">
+                <p className="text-[#f9f9fb]">{user.email}</p>
+                <span className="inline-block mt-2 px-3 py-1 bg-[#383838] text-white rounded-full text-sm">
                   {user.role}
                 </span>
               </div>
               <div className="mt-4 md:mt-0">
                 <button
                   onClick={handleLogout}
-                  className="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors"
+                  className="bg-[#383838] hover:bg-[#51a31d] text-white px-4 py-2 rounded-lg transition-colors"
                 >
                   تسجيل الخروج
                 </button>
@@ -161,12 +160,12 @@ const Profile = () => {
           <div className="p-6">
             <div className="border-b border-gray-200 pb-4 mb-4">
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-semibold text-gray-800">
+                <h2 className="text-xl font-semibold text-[#383838]">
                   المعلومات الشخصية
                 </h2>
                 <button
                   onClick={() => setIsEditing(!isEditing)}
-                  className="bg-green-500 hover:bg-green-600 text-white px-4 py-1 rounded-lg transition-colors text-sm"
+                  className="bg-[#51a31d] hover:bg-[#383838] text-white px-4 py-1 rounded-lg transition-colors text-sm"
                 >
                   {isEditing ? "إلغاء" : "تعديل المعلومات"}
                 </button>
@@ -178,8 +177,8 @@ const Profile = () => {
                   encType="multipart/form-data"
                 >
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="bg-gray-50 p-4 rounded-lg shadow-sm">
-                      <label className="text-sm text-gray-500 block mb-1">
+                    <div className="bg-[#f9f9fb] p-4 rounded-lg shadow-sm">
+                      <label className="text-sm text-[#383838] block mb-1">
                         الاسم
                       </label>
                       <input
@@ -187,12 +186,12 @@ const Profile = () => {
                         name="name"
                         value={updatedUser.name}
                         onChange={handleInputChange}
-                        className="w-full p-2 border border-green-500 rounded-md bg-gray-50 focus:outline-none focus:border-green-600"
+                        className="w-full p-2 border border-[#51a31d] rounded-md bg-[#f9f9fb] focus:outline-none focus:border-[#383838]"
                         required
                       />
                     </div>
-                    <div className="bg-gray-50 p-4 rounded-lg shadow-sm">
-                      <label className="text-sm text-gray-500 block mb-1">
+                    <div className="bg-[#f9f9fb] p-4 rounded-lg shadow-sm">
+                      <label className="text-sm text-[#383838] block mb-1">
                         البريد الإلكتروني
                       </label>
                       <input
@@ -200,26 +199,26 @@ const Profile = () => {
                         name="email"
                         value={updatedUser.email}
                         onChange={handleInputChange}
-                        className="w-full p-2 border border-green-500 rounded-md bg-gray-50 focus:outline-none focus:border-green-600"
+                        className="w-full p-2 border border-[#51a31d] rounded-md bg-[#f9f9fb] focus:outline-none focus:border-[#383838]"
                         required
                       />
                     </div>
-                    <div className="bg-gray-50 p-4 rounded-lg shadow-sm md:col-span-2">
-                      <label className="text-sm text-gray-500 block mb-1">
+                    <div className="bg-[#f9f9fb] p-4 rounded-lg shadow-sm md:col-span-2">
+                      <label className="text-sm text-[#383838] block mb-1">
                         الصورة الشخصية
                       </label>
                       <input
                         type="file"
                         name="profilePicture"
                         onChange={handleFileChange}
-                        className="w-full p-2 border border-green-500 rounded-md bg-gray-50 focus:outline-none focus:border-green-600"
+                        className="w-full p-2 border border-[#51a31d] rounded-md bg-[#f9f9fb] focus:outline-none focus:border-[#383838]"
                       />
                     </div>
                   </div>
                   <div className="flex justify-end">
                     <button
                       type="submit"
-                      className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg transition-colors"
+                      className="bg-[#51a31d] hover:bg-[#383838] text-white px-6 py-2 rounded-lg transition-colors"
                     >
                       حفظ التغييرات
                     </button>
@@ -227,25 +226,25 @@ const Profile = () => {
                 </form>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="bg-gray-50 p-4 rounded-lg shadow-sm">
-                    <label className="text-sm text-gray-500">الاسم</label>
-                    <p className="font-medium text-gray-800">{user.name}</p>
+                  <div className="bg-[#f9f9fb] p-4 rounded-lg shadow-sm">
+                    <label className="text-sm text-[#383838]">الاسم</label>
+                    <p className="font-medium text-[#383838]">{user.name}</p>
                   </div>
-                  <div className="bg-gray-50 p-4 rounded-lg shadow-sm">
-                    <label className="text-sm text-gray-500">
+                  <div className="bg-[#f9f9fb] p-4 rounded-lg shadow-sm">
+                    <label className="text-sm text-[#383838]">
                       البريد الإلكتروني
                     </label>
-                    <p className="font-medium text-gray-800">{user.email}</p>
+                    <p className="font-medium text-[#383838]">{user.email}</p>
                   </div>
-                  <div className="bg-gray-50 p-4 rounded-lg shadow-sm">
-                    <label className="text-sm text-gray-500">الدور</label>
-                    <p className="font-medium text-gray-800">{user.role}</p>
+                  <div className="bg-[#f9f9fb] p-4 rounded-lg shadow-sm">
+                    <label className="text-sm text-[#383838]">الدور</label>
+                    <p className="font-medium text-[#383838]">{user.role}</p>
                   </div>
-                  <div className="bg-gray-50 p-4 rounded-lg shadow-sm">
-                    <label className="text-sm text-gray-500">
+                  <div className="bg-[#f9f9fb] p-4 rounded-lg shadow-sm">
+                    <label className="text-sm text-[#383838]">
                       تاريخ الإنشاء
                     </label>
-                    <p className="font-medium text-gray-800">
+                    <p className="font-medium text-[#383838]">
                       {new Date(user.createdAt).toLocaleDateString("ar-EG")}
                     </p>
                   </div>

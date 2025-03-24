@@ -8,7 +8,7 @@ const Joi = require("joi");
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
-// تهيئة multer لتخزين الصور
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "uploads/");
@@ -153,7 +153,6 @@ exports.getUserProfile = async (req, res) => {
   }
 };
 
-// مخطط التحقق باستخدام Joi
 const profileUpdateSchema = Joi.object({
   name: Joi.string().min(3).max(50).optional().messages({
     "string.base": "الاسم يجب أن يكون نصًا",
@@ -167,14 +166,13 @@ const profileUpdateSchema = Joi.object({
       "string.base": "البريد الإلكتروني يجب أن يكون نصًا",
       "string.email": "صيغة البريد الإلكتروني غير صحيحة",
     }),
-  file: Joi.any().optional(), // للتحقق من الصورة إذا كانت موجودة
+  file: Joi.any().optional(), 
 });
 
 exports.updateUserProfile = async (req, res) => {
   const { name, email } = req.body;
   const profilePicture = req.file ? `/uploads/${req.file.filename}` : null;
 
-  // التحقق من البيانات باستخدام Joi
   const { error } = profileUpdateSchema.validate(
     { name, email, file: req.file },
     { abortEarly: false }
@@ -191,7 +189,6 @@ exports.updateUserProfile = async (req, res) => {
     const user = await User.findById(req.user.id);
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    // تحديث بيانات المستخدم
     user.name = name || user.name;
     user.email = email || user.email;
     if (profilePicture) {
@@ -238,14 +235,24 @@ exports.getUserFromToken = async (req, res) => {
 
 exports.getAllUsers = async (req, res) => {
   try {
-    const users = await User.find(); 
-  
-    res.status(200).json({ users});
+    const page = parseInt(req.query.page) || 1;
+    const perPage = 6; 
+    const skip = (page - 1) * perPage; 
+
+    const users = await User.find().skip(skip).limit(perPage); 
+    const totalUser = await User.countDocuments(); 
+    const totalPages = Math.ceil(totalUser / perPage);
+
+    res.status(200).json({
+      users, // المستخدمين في الصفحة الحالية
+      totalUser, // إجمالي عدد المستخدمين
+      totalPages, // عدد الصفحات الإجمالي
+      currentPage: page, // الصفحة الحالية
+    });
   } catch (error) {
     res.status(500).json({ message: 'Error fetching users', error: error.message });
   }
 };
-
 
 exports.approveUser = async (req, res) => {
   const { userId } = req.params;
@@ -266,6 +273,8 @@ exports.approveUser = async (req, res) => {
   } catch (error) {
     console.error('حدث خطأ أثناء الموافقة على المستخدم:', error);
     res.status(500).json({ message: 'حدث خطأ أثناء الموافقة على المستخدم' });}}
+
+    
 exports.getUserRoleFromToken = async (req, res) => {
   try {
     const token = req.cookies.authToken;

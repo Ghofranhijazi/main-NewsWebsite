@@ -18,6 +18,11 @@ const PublisherProfile = () => {
   });
 
   const [userId, setUserId] = useState("");
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    totalPages: 1,
+    totalArticles: 0,
+  });
 
   useEffect(() => {
     const getUserId = async () => {
@@ -44,20 +49,36 @@ const PublisherProfile = () => {
 
   // تعديل الـ useEffect الخاص بجلب المقالات ليعمل بعد تعيين userId
   useEffect(() => {
-    if (!userId) return; // إذا كانت userId فارغة، لا تبدأ الطلب لجلب المقالات
+    if (!userId) return;
 
-    console.log("🚀 Fetching articles for user ID:", userId);
-    axios
-      .get(`http://localhost:5000/api/articles/foruser/${userId}`)
-      .then((response) => {
-        setArticles(response.data);
+    const fetchArticles = async () => {
+      setLoading(true);
+      try {
+        const res = await axios.get(
+          `http://localhost:5000/api/articles/foruser/${userId}`,
+          {
+            params: {
+              page: pagination.currentPage,
+              limit: pagination.limit,
+            },
+          }
+        );
+
+        setArticles(res.data.articles);
+        setPagination((prev) => ({
+          ...prev,
+          totalPages: res.data.totalPages,
+          totalArticles: res.data.totalArticles,
+        }));
         setLoading(false);
-      })
-      .catch((err) => {
-        setError("خطأ في جلب المقالات");
+      } catch (err) {
+        setError("Error fetching articles");
         setLoading(false);
-      });
-  }, [userId]);
+      }
+    };
+
+    fetchArticles();
+  }, [userId, pagination.currentPage]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -66,6 +87,11 @@ const PublisherProfile = () => {
       [name]: value,
     }));
   };
+
+
+
+
+
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -126,6 +152,27 @@ const PublisherProfile = () => {
     }
   };
 
+
+
+
+
+
+  // Handle pagination click
+  const handlePageChange = (newPage) => {
+    if (newPage < 1 || newPage > pagination.totalPages) return;
+    setPagination((prev) => ({
+      ...prev,
+      currentPage: newPage,
+    }));
+  };
+
+
+
+
+
+
+
+
   // تصفية المقالات حسب الحالة والبحث
   const filteredArticles = articles.filter((article) => {
     const matchesTab = activeTab === "all" || article.status === activeTab;
@@ -170,7 +217,7 @@ const PublisherProfile = () => {
   return (
     <div className="bg-[#f0f2f5] min-h-screen" dir="rtl">
       {/* رأس الصفحة مع الإحصائيات */}
-      <div className="bg-gradient-to-r from-[#51a31d] via-[#61b12d] to-[#7585ff] text-white shadow-md">
+      <div className="bg-[#51a31d] text-white shadow-md">
         <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row items-center justify-between">
             <div className="flex flex-col md:flex-row items-center mb-6 md:mb-0">
@@ -201,7 +248,7 @@ const PublisherProfile = () => {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div className="bg-white bg-opacity-20 rounded-lg p-4 min-w-[100px] text-center">
                 <div className="text-2xl font-bold text-black">
-                  {articles.length}
+                  {pagination.totalArticles} {/* العدد الإجمالي للمقالات */}
                 </div>
                 <div className="text-sm text-black">المقالات</div>
               </div>
@@ -383,7 +430,7 @@ const PublisherProfile = () => {
                 <div className="pt-4">
                   <button
                     onClick={handleLogout}
-                    className="w-full bg-[#383838] hover:bg-[#2d2d2d] text-white px-4 py-2 rounded-lg transition-colors"
+                    className="w-full bg-black hover:bg-[#2d2d2d] text-white px-4 py-2 rounded-lg transition-colors"
                   >
                     تسجيل الخروج
                   </button>
@@ -478,6 +525,27 @@ const PublisherProfile = () => {
                       </Link>
                     ))
                   )}
+                </div>
+
+                {/* Pagination controls */}
+                <div className="mt-4 flex justify-center">
+                  <button
+                    onClick={() => handlePageChange(pagination.currentPage - 1)}
+                    disabled={pagination.currentPage === 1}
+                    className="px-4 py-2 rounded-lg bg-gray-200 text-gray-600 hover:bg-gray-300 disabled:opacity-50"
+                  >
+                    السابق
+                  </button>
+                  <span className="mx-4 text-lg">
+                    الصفحة {pagination.currentPage} من {pagination.totalPages}
+                  </span>
+                  <button
+                    onClick={() => handlePageChange(pagination.currentPage + 1)}
+                    disabled={pagination.currentPage === pagination.totalPages}
+                    className="px-4 py-2 rounded-lg bg-gray-200 text-gray-600 hover:bg-gray-300 disabled:opacity-50"
+                  >
+                    التالي
+                  </button>
                 </div>
               </div>
             </div>

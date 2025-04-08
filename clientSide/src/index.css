@@ -1,5 +1,21 @@
 @import "tailwindcss";
-
 * {
   font-family: "Tajawal", sans-serif;
+}
+
+.swiper-pagination-bullet-health {
+  @apply w-3 h-3 rounded-full bg-gray-300 hover:bg-gray-400 focus:outline-none transition;
+}
+
+.swiper-pagination-bullet-active-health {
+  @apply bg-gray-600;
+}
+
+
+.swiper-pagination-bullet-arg {
+  @apply w-3 h-3 rounded-full bg-gray-300 hover:bg-gray-400 focus:outline-none transition;
+}
+
+.swiper-pagination-bullet-active-arg {
+  @apply bg-gray-600;
 }

@@ -13,7 +13,6 @@ const CategoryPage = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
 
-  // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
   const [pagination, setPagination] = useState({});
 
@@ -25,7 +24,7 @@ const CategoryPage = () => {
         const response = await axios.get(
           "http://localhost:5000/api/articles/all",
           {
-            params: { page: currentPage, limit: 10 }, // Pagination Parameters
+            params: { page: currentPage, limit: 10 }, 
           }
         );
         setArticles(response.data.data);

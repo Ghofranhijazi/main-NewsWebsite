@@ -9,7 +9,7 @@ import HealthSection from "./HealthSection";
 import PolicySection from "./PolicySection";
 import ArgSection from "./ArgSection";
 import LiveNewsSlider from "./LiveNewsSlider";
-import ArabicNewsBlog from "./ArabicNewsBlog";
+
 
 
 
@@ -31,7 +31,7 @@ const Home = () => {
         <PolicySection />
         <ArgSection />
         <LiveNewsSlider />
-        <ArabicNewsBlog />
+      
     
       </div>
     </div>

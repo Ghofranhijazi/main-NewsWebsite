@@ -25,7 +25,7 @@ exports.createArticle = async (req, res) => {
       return res.status(400).json({ error: "بعض الحقول مفقودة" });
     }
 
-    // توليد وصف تلقائي من الفقرة الأولى
+   
     let description = "";
     if (paragraph1) {
       description =

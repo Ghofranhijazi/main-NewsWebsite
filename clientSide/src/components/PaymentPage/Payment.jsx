@@ -273,7 +273,7 @@ const PaymentModal = ({ email, onClose }) => {
                 value={formData.name}
                 onChange={handleChange}
                 className="w-full py-2 border-b border-gray-300 focus:outline-none focus:border-blue-500 text-right" 
-                placeholder=" الاسم الرباعي"
+                placeholder=" الاسم "
                
                 required
               />

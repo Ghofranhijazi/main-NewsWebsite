@@ -54,14 +54,9 @@ const PublisherProfile = () => {
     const fetchArticles = async () => {
       setLoading(true);
       try {
+        console.log(userId);
         const res = await axios.get(
-          `http://localhost:5000/api/articles/foruser/${userId}`,
-          {
-            params: {
-              page: pagination.currentPage,
-              limit: pagination.limit,
-            },
-          }
+          `http://localhost:5000/api/articles/foruser/${userId}`
         );
 
         setArticles(res.data.articles);
@@ -87,11 +82,6 @@ const PublisherProfile = () => {
       [name]: value,
     }));
   };
-
-
-
-
-
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -152,11 +142,6 @@ const PublisherProfile = () => {
     }
   };
 
-
-
-
-
-
   // Handle pagination click
   const handlePageChange = (newPage) => {
     if (newPage < 1 || newPage > pagination.totalPages) return;
@@ -165,13 +150,6 @@ const PublisherProfile = () => {
       currentPage: newPage,
     }));
   };
-
-
-
-
-
-
-
 
   // تصفية المقالات حسب الحالة والبحث
   const filteredArticles = articles.filter((article) => {

@@ -247,8 +247,6 @@
 // };
 
 // export default ResponsiveNavbar;
-
-
 import React, { useState, useEffect } from "react";
 import { User, Bookmark, Menu, X } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -307,7 +305,14 @@ const ResponsiveNavbar = () => {
         item.name === "انضم إلينا"
       );
     } else if (userRole === "journalist") {
-      return true; // يعرض كل العناصر
+      return (
+        item.name === "الصفحة الرئيسية" ||
+        item.name === "عن يقين" ||
+        item.name === "المقالات" ||
+        item.name === "تواصل معنا" ||
+        item.name ===  "ملف الناشر" ||
+        item.name ===  "انشر مقال"
+      ); 
     }
     return false;
   });
@@ -327,7 +332,9 @@ const ResponsiveNavbar = () => {
 
         /* التأثيرات على الأيقونات */
         .icon-hover:hover {
-          color: #51a31d;
+          color: #51
+
+a31d;
         }
 
         /* القائمة المنسدلة للجوال */

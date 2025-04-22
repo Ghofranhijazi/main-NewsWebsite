@@ -11,21 +11,21 @@ const LiveNewsSlider = () => {
       url: "https://www.youtube.com/embed/bNyUyrR0PHo", // الجزيرة
       title: "🔴 بث مباشر | قناة الجزيرة الإخبارية",
     },
-    {
-      id: 2,
-      url: "https://www.youtube.com/embed/zq6ohxTDNZY", // العربية
-      title: "🔴 بث مباشر | قناة العربية الحدث",
-    },
+    // {
+    //   id: 2,
+    //   url: "https://www.youtube.com/embed/zq6ohxTDNZY", // العربية
+    //   title: "🔴 بث مباشر | قناة العربية الحدث",
+    // },
     {
       id: 3,
       url: "https://www.youtube.com/embed/oY976rzO-EI", // سكاي نيوز
       title: "🔴 بث مباشر | Sky News - سكاي نيوز عربية",
     },
-    {
-      id: 4,
-      url: "https://www.youtube.com/embed/VuYzy8IuT0Y", // فرانس 24 عربي
-      title: "🔴 بث مباشر | فرانس 24 - الأخبار بالعربية",
-    },
+    // {
+    //   id: 4,
+    //   url: "https://www.youtube.com/embed/VuYzy8IuT0Y", // فرانس 24 عربي
+    //   title: "🔴 بث مباشر | فرانس 24 - الأخبار بالعربية",
+    // },
     {
       id: 5,
       url: "https://www.youtube.com/embed/e2RgSa1Wt5o", //قناة العربي
@@ -38,7 +38,7 @@ const LiveNewsSlider = () => {
     },
   ];
 
-  const visibleSlides = 3;
+  const visibleSlides = 2;
   const totalSlides = liveStreams.length;
 
   const handleNext = () => {
